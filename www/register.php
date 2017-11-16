@@ -1,6 +1,7 @@
 <?php
 	$page_title = "Register";
-	include ('includes/header.php');
+	include 'includes/header.php';
+	include 'includes/db.php';
 
 	$error = [];
 	if (array_key_exists('register',$_POST)) {
@@ -21,7 +22,24 @@
 			$error['pword']  = "Please confirm your password";
 		}	
 		if (empty($error)) {
-			#do database stuff;
+			$clean = array_map('trim',$_POST);
+			
+			//encrypting password
+			$hash = password_hash($clean['password'], PASSWORD_BCRYPT);
+			
+			//prepare is used in communicating with the db
+			//:f,:l,:e,:h are all placeholders for values we want to pass into the db
+			$stmt = $conn->prepare("INSERT INTO admin(firstName,lastName,email,hash) VALUES(:f, :l, :e, :h)"); //or ("INSERT INTO admin VALUES(null,:f, :l, :e, :h)")
+
+			//binding placeholders and values
+			$data = [
+				":f" => $clean['fname'],
+				":l" => $clean['lname'],
+				":e" => $clean['email'],
+				":h" => $hash
+			];
+			
+			$stmt->execute($data);
 		}
 			
 	}
