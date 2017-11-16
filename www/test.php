@@ -1,4 +1,5 @@
 <?php
+    include('funct.php');
     define('MAX_FILE_SIZE', '2097152');
     $ext = ['image/jpg','image/jpeg','image/png'];
 
@@ -17,14 +18,9 @@
         if (!in_array($_FILES['pics']['type'], $ext)) {
             $errors[] = "File format not supported";
         }
-        $rnd = rand(000000000,999999999);
-        $strip_name = str_replace(' ','_',$_FILES['pics']['name']);
-        
-        $filename = $rnd.$strip_name;
-        $destination = './uploads/'.$filename;
 
         //validates if file is moved
-        if (!move_uploaded_file($_FILES['pics']['tmp_name'],$destination)) {
+        if (!move_uploaded_file($_FILES['pics']['tmp_name'],destination())) {
             $errors[] = "File not upload";
         }
 
