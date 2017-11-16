@@ -59,4 +59,13 @@
         }
         return $result;
     }
+
+    //refactoring error messages
+    function displayErrors($errors,$name){
+        $result = "";
+        if (isset($errors[$name])) { 
+            echo '<span class=err >'.$errors[$name].'</span>';
+         }	
+         return $result;
+    }
 ?>

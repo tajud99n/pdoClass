@@ -42,28 +42,30 @@
 		<hr>
 		<form id="register"  action ="register.php" method ="POST">
 			<div>
-				<?php if (isset($error['fname'])) { echo '<span class=err >'.$error['fname'].'</span>'; } ?>
+				<?php $data = displayErrors($error, 'fname'); ?>
 				<label>first name:</label>
 				<input type="text" name="fname" placeholder="first name">
 			</div>
 			<div>
-				<?php if (isset($error['lname'])) { echo '<span class=err >'.$error['lname'].'</span>'; } ?>				
+				<?php $data = displayErrors($error, 'lname'); ?>			
 				<label>last name:</label>	
 				<input type="text" name="lname" placeholder="last name">
 			</div>
 
 			<div>
-				<?php if (isset($error['email'])) { echo '<span class=err >'.$error['email'].'</span>'; } ?>								
+				<?php $data = displayErrors($error, 'email'); ?>								
 				<label>email:</label>
 				<input type="text" name="email" placeholder="email">
 			</div>
 			<div>
+				<?php $data = displayErrors($error, 'password') ?>			
 				<?php if (isset($error['password'])) { echo '<span class=err >'.$error['password'].'</span>'; } ?>								
 				<label>password:</label>
 				<input type="password" name="password" placeholder="password">
 			</div>
  
 			<div>
+				<?php $data = displayErrors($error, 'pword') ?>			
 				<?php if (isset($error['pword'])) { echo '<span class=err >'.$error['pword'].'</span>'; } ?>								
 				<label>confirm password:</label>	
 				<input type="password" name="pword" placeholder="password">
