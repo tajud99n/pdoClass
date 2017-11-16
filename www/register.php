@@ -2,6 +2,7 @@
 	$page_title = "Register";
 	include 'includes/header.php';
 	include 'includes/db.php';
+	include 'funct.php';
 
 	$error = [];
 	if (array_key_exists('register',$_POST)) {
@@ -15,6 +16,11 @@
 		if (empty($_POST['email'])) {
 			$error['email']  = "Please enter your email";
 		}	
+
+		//to validate if email already exist in db
+		if(doesEmailExists($conn, $_POST['email'])){
+			$error['email'] = "Email already exist";
+		}
 		if (empty($_POST['password'])) {
 			$error['password']  = "Please enter your password";
 		}
@@ -24,22 +30,8 @@
 		if (empty($error)) {
 			$clean = array_map('trim',$_POST);
 			
-			//encrypting password
-			$hash = password_hash($clean['password'], PASSWORD_BCRYPT);
-			
-			//prepare is used in communicating with the db
-			//:f,:l,:e,:h are all placeholders for values we want to pass into the db
-			$stmt = $conn->prepare("INSERT INTO admin(firstName,lastName,email,hash) VALUES(:f, :l, :e, :h)"); //or ("INSERT INTO admin VALUES(null,:f, :l, :e, :h)")
-
-			//binding placeholders and values
-			$data = [
-				":f" => $clean['fname'],
-				":l" => $clean['lname'],
-				":e" => $clean['email'],
-				":h" => $hash
-			];
-			
-			$stmt->execute($data);
+			//refactoring the admin register
+			doAdminRegister($conn,$clean);
 		}
 			
 	}
