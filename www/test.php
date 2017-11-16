@@ -20,11 +20,12 @@
         }
 
         //validates if file is moved
-        if (!move_uploaded_file($_FILES['pics']['tmp_name'],destination())) {
+      /*  if (!move_uploaded_file($_FILES['pics']['tmp_name'],destination())) {
             $errors[] = "File not upload";
-        }
+        }*/
 
         if (empty($errors)) {
+            move_uploaded_file($_FILES['pics']['tmp_name'],destination());
             echo "File upload successful";
         }else {
             foreach ($errors as $err) {
