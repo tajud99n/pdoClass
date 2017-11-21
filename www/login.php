@@ -15,18 +15,25 @@
 		}
 		if (empty($error)) {
 			$clean =   array_map('trim',$_POST);
-			$hash = password_hash($clean['password'], PASSWORD_BCRYPT);
 
-			$stmt = $conn->prepare("SELECT * FROM admin WHERE :e=email");
+			$stmt = $conn->prepare("SELECT * FROM admin WHERE email=:e");
 			$stmt->bindParam(":e", $_POST['email']);
 
 			$stmt->execute();
 
 			if($stmt->rowCount() == 1){
 
-				while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
-				if ($result['hash'] == $hash ) {
+				while($result = $stmt->fetch(PDO::FETCH_ASSOC)){										
+				//if ($result['hash'] == password_verify($_POST['password'], $result['hash'])) {
+					//echo $result['hash']."<br>";
+					//echo $_POST['password'];
+					if (password_verify($_POST['password'],$result['hash'])) {
+						echo 1;
+					}else {
+						echo 0;
+					}
 					//header("location:");
+				//}
 				}
 			}
 		}
