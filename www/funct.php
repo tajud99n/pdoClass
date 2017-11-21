@@ -155,5 +155,19 @@
             echo 'class = "selected"';
         }
     }
+
+    //Delete category on view category page
+    function deleteCategory($dbconn,$input){
+        $stmt = $dbconn->prepare("DELETE FROM category WHERE category_name=:catName AND category_id=:catId");
+
+        $data = [
+            ":catName" => $input['cat_name'],
+            ":catId" => $input['id']
+        ];
+
+        $stmt->execute($data);
+        redirect("view_category.php");
+
+    }
 ?>
 
