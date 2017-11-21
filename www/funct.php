@@ -90,4 +90,70 @@
          }	
          return $result;
     }
+
+    //add category
+    function addCategory($dbconn,$input){
+        $stmt = $dbconn->prepare("INSERT INTO category(category_name) VAlUES(:catName)");
+        $stmt->bindParam(":catName",$input['cat_name']);
+        $stmt->execute();
+    }
+
+    //validate login
+    function checkLogin(){
+        if(!isset($_SESSION['admin_id'])){
+            header("location:login.php");
+        }
+    }
+
+    //redirect
+    function redirect($location,$msg){
+        header("location:".$location.$msg);
+    }
+
+    //view category on admin dashboard
+    function viewCategory($dbconn){
+        $result = "";
+        $stmt = $dbconn->prepare("SELECT * FROM category");
+        $stmt->execute();
+
+        while($row = $stmt->fetch(PDO::FETCH_BOTH)){
+            $result .= '<tr><td>'.$row[0].'</td>';
+            $result .= '<td>'.$row[1].'</td>';
+            $result .= '<td><a href="edit_category.php?cat_id='.$row[0].'">edit</a></td>';
+            $result .= '<td><a href="delete_category.php?cat_id='.$row[0].'">delete</a></td></tr>';            
+        }
+        return $result;
+    }
+
+    //get category for edit on Admin dash board
+    function getCategoryById($dbconn,$id){
+        $stmt = $dbconn->prepare("SELECT * FROM category WHERE category_id=:catId");
+        $stmt->bindParam(':catId',$id);
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_BOTH);
+
+        return $row;
+    }
+
+    //update category on edit category page
+    function updateCategory($dbconn,$input){
+        $stmt = $dbconn->prepare("UPDATE category SET category_name=:catName WHERE category_id=:catId");
+
+        $data = [
+            ":catName" => $input['cat_name'],
+            ":catId" => $input['id']
+        ];
+
+        $stmt->execute($data);
+    }
+
+    //
+    function curNave($page){
+        $curPage = basename($_SERVER['SCRIPT_FILENAME']);
+        if ($curPage == $page) {
+            echo 'class = "selected"';
+        }
+    }
 ?>
+

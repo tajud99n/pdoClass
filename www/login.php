@@ -24,7 +24,7 @@
 				$_SESSION['admin_id'] = $details['admin_id'];
 				$_SESSION['name'] = $details['firstName']." ".$details['lastName'];
 
-				header("location:sandbox.php");
+				redirect("add_category.php?msg=","admin successfully logged in");
 			}
 		}
 	}
