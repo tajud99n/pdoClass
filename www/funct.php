@@ -45,6 +45,7 @@
 
     function loginAdmin($dbconn){
 
+            $result = [];
             $stmt = $dbconn->prepare("SELECT * FROM admin WHERE email=:e");
 			$stmt->bindParam(":e", $_POST['email']);
 
@@ -52,14 +53,16 @@
 
 			if($stmt->rowCount() == 1){
 
-				while($result = $stmt->fetch(PDO::FETCH_ASSOC)){										
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);									
 				
-					if (password_verify($_POST['password'],$result['hash'])) {
-						echo 1;
-					//header("location:");
-                    }
-				}
-			}
+			if (!password_verify($_POST['password'],$row['hash'])) {
+				return false;
+            }else{
+                $result[] = true;
+                $result[] = $row;
+            }
+            }
+            return $result;
     }
 
     function doesEmailExists($dbconn,$email){

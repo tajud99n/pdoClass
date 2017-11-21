@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	$page_title = "Login"; 
 	include ('includes/header.php');
 	include 'includes/db.php';
@@ -16,7 +17,15 @@
 		if (empty($error)) {
 			$clean =   array_map('trim',$_POST);
 
-			loginAdmin($conn);
+			$data = loginAdmin($conn);
+			if ($data[0]) {
+				$details = $data[1];
+
+				$_SESSION['admin_id'] = $details['admin_id'];
+				$_SESSION['name'] = $details['firstName']." ".$details['lastName'];
+
+				header("location:sandbox.php");
+			}
 		}
 	}
 ?>
